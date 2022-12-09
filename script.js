@@ -4,6 +4,8 @@ let memory = {
     operation: '',
 }; console.log(memory.current.join(''));
 
+let inputFlag = true;
+
 document.querySelectorAll('.number').forEach(item => {
     item.addEventListener('click', (event) => {
         if (event.target.id == 'decimal') {
@@ -20,10 +22,34 @@ document.querySelectorAll('.number').forEach(item => {
     });
 });
 
+document.querySelectorAll('.operation').forEach(item => {
+    item.addEventListener('click', (event) => {
+        memory.operation = event.target.id;
+        if (memory.previous == '') {
+            memory.previous = parseFloat(memory.current.join(''));
+        } else {
+            memory.previous = evaluation(memory);
+        };
+        memory.current = ['0'];
+        console.log(memory.previous);
+    })
+})
+
 document.getElementById('clearEntry').addEventListener('click', () => {
     memory.current = ['0'];
     console.log(memory.current.join(''));
 });
+
+function evaluation(memory) {
+    let a = memory.previous;
+    let b = parseFloat(memory.current.join(''));
+    switch (memory.operation) {
+        case "divide": return a / b;
+        case "subtract": return a - b;
+        case "add": return a + b;
+        case "multiply": return a * b;
+    }
+}
 
 // let display = ["0"];
 
