@@ -2,116 +2,93 @@ let memory = {
     current: ['0'],
     previous: '',
     operation: '',
-};
-
-let inputFlag = false;
-let evaluationFlag = false;
+    evaluate: function() {
+        let a = this.previous;
+        let b = null; // for some reason it doesn't work if i don't include this
+        if (typeof this.current == "number") {b = this.current;}
+        else {b = parseFloat(this.current.join(''));};
+        switch (this.operation) {
+            case "divide": return a / b;
+            case "subtract": return a - b;
+            case "add": return a + b;
+            case "multiply": return a * b;
+        };
+    }, 
+    wipe: function() {
+        this.current = ['0'];
+        this.previous = '';
+        this.operation = '';
+    }
+}; let flags = {
+    input: false,
+    evaluation: false,
+    reset: function() {
+        this.input = false;
+        this.evaluation = false;
+    }
+}
 
 const display = document.getElementById('display');
 function updateDisplay(textcontent) {
     display.textContent = textcontent;
-};
-
-updateDisplay(memory.current.join(''));
+}; updateDisplay(memory.current.join(''));
 
 document.querySelectorAll('.number').forEach(item => {
     item.addEventListener('click', (event) => {
-
-        if (evaluationFlag == true) {
-            wipeMemory(memory);
-            evaluationFlag = false;
-        };
-        
-        if (event.target.id == 'decimal') {
+        if (flags.evaluation == true) {
+            memory.wipe();
+            flags.evaluation = false;
+        }
+        if (event.target.id == "decimal") {
             if (memory.current.includes('.') != true) {
                 memory.current.push('.');
-                console.log(memory.current.join(''));
+            }
+        } else if (event.target.id == "changeSign") {
+            if (memory.current.join('') != "0") {
+                memory.current.includes('-') ? memory.current.shift() : memory.current.unshift("-") ;
             }
         } else {
-            let num = event.target.id.charAt(event.target.id.length - 1);
-            if (memory.current.join('') === "0") {
-                memory.current[0] = num;
-            } else {
-                memory.current.push(num);
-            };
-        }; 
-        
-        if (inputFlag == false) {inputFlag = true;};
+            const num = event.target.id.charAt(event.target.id.length - 1);
+            console.log(memory.current);
+            memory.current.join('') === "0" ? memory.current[0] = num : memory.current.push(num);
+            console.log(memory.current);
+        };
         updateDisplay(memory.current.join(''));
+        flags.input = true;
     });
 });
 
 document.querySelectorAll('.operation').forEach(item => {
     item.addEventListener('click', (event) => {
-        if (evaluationFlag == true) {evaluationFlag = false;};
-        if (inputFlag == true) {
-            if (memory.previous == '') {
-                memory.previous = parseFloat(memory.current.join(''));
-            } else {
-                memory.previous = evaluation(memory);
-            } 
+        if (flags.evaluation == true) {flags.evaluation = false;};
+        if (flags.input == true) {
+            memory.previous == '' ? memory.previous = parseFloat(memory.current.join('')) : memory.previous = memory.evaluate();
             memory.operation = event.target.id;
             memory.current = ['0'];
-            inputFlag = false;
+            flags.input = false;
         } else {
             memory.operation = event.target.id;
-        }
-        updateDisplay(memory.previous);
+        }; updateDisplay(memory.previous);
     });
 });
 
-document.getElementById('clearEntry').addEventListener('click', () => {
-    memory.current = ['0'];
-    updateDisplay(memory.current.join(''));
+document.querySelectorAll('.control').forEach(item => {
+    item.addEventListener('click', (event) => {
+        console.log(event.target.id);
+        switch (event.target.id) {
+            case "clearEntry": memory.current = ['0']; break;
+            case "clearAll": memory.wipe(); flags.reset(); break;
+            case "backspace": memory.current.pop(); break;
+        }; 
+        updateDisplay(memory.current.join(''));
+    });
 });
 
 document.getElementById('equals').addEventListener('click', () => {
-    if (inputFlag == true) {
+    if (flags.input == true) {
         memory.current = parseFloat(memory.current.join(''));
-        updateDisplay(evaluation(memory));
-        evaluationFlag = true;
+        updateDisplay(memory.evaluate());
+        flags.evaluation = true;
+        flags.input = false; // remove if buggy
     };
 });
-
-document.getElementById('clearAll').addEventListener('click', () => {
-    wipeMemory(memory);
-    updateDisplay(memory.current.join(''));
-});
-
-document.getElementById('backspace').addEventListener('click', () => {
-    memory.current.pop();
-    updateDisplay(memory.current.join(''));
-});
-
-document.getElementById('changeSign').addEventListener('click', () => {
-    if (memory.current.join('') != "0") {
-        if (memory.current.includes('-') != true) {
-            memory.current.unshift("-");
-        } else {
-            memory.current.shift();
-        }
-    }; updateDisplay(memory.current.join(''));
-});
-
-function evaluation(memory) {
-    let a = memory.previous;
-    let b = null;
-    if (typeof memory.current == "number") {
-        b = memory.current;
-    } else {
-        b = parseFloat(memory.current.join(''));
-    }
-    switch (memory.operation) {
-        case "divide": return a / b;
-        case "subtract": return a - b;
-        case "add": return a + b;
-        case "multiply": return a * b;
-    };
-};
-
-function wipeMemory(memory) {
-    memory.current = ['0'];
-    memory.previous = '';
-    memory.operation = '';
-    inputFlag = false;
-}
