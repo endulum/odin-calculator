@@ -73,6 +73,26 @@ document.getElementById('equals').addEventListener('click', () => {
     };
 });
 
+document.getElementById('clearAll').addEventListener('click', () => {
+    wipeMemory(memory);
+    updateDisplay(memory.current.join(''));
+});
+
+document.getElementById('backspace').addEventListener('click', () => {
+    memory.current.pop();
+    updateDisplay(memory.current.join(''));
+});
+
+document.getElementById('changeSign').addEventListener('click', () => {
+    if (memory.current.join('') != "0") {
+        if (memory.current.includes('-') != true) {
+            memory.current.unshift("-");
+        } else {
+            memory.current.shift();
+        }
+    }; updateDisplay(memory.current.join(''));
+});
+
 function evaluation(memory) {
     let a = memory.previous;
     let b = null;
@@ -95,50 +115,3 @@ function wipeMemory(memory) {
     memory.operation = '';
     inputFlag = false;
 }
-
-
-
-// let display = ["0"];
-
-// function updateDisplay() {
-//     const toDisplay = display.join('');
-//     document.getElementById('display').textContent = toDisplay;
-// }
-
-// function extractNumber(event) {
-//     let num = event.srcElement.id;
-//     num = num.charAt(num.length - 1);
-//     if (display[0] == 0) {
-//         display[0] = num;
-//         updateDisplay();
-//     } else {
-//         display.push(num);
-//         updateDisplay();
-//     }
-// } function extractOperation(event) {
-//     let operation = event.srcElement.id;
-//     updateDisplay(operation);
-//     updateDisplay(operate(operation, 4, 5));
-// }
-
-// document.querySelectorAll('.number').forEach(item => {
-//     item.addEventListener('click', extractNumber);
-// }); document.querySelectorAll('.operation').forEach(item => {
-//     item.addEventListener('click', extractOperation);
-// })
-
-// function add(a, b) {
-//     return a + b
-// } function subtract(a, b) {
-//     return a - b
-// } function multiply(a, b) {
-//     return a * b
-// } function divide(a, b) {
-//     return a / b
-// }
-
-// function operate(operation, a, b) {
-//     return operation(a, b);
-// } 
-
-// updateDisplay(operate(sum, 4, 5));
