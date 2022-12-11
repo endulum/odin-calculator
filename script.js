@@ -1,3 +1,5 @@
+// STILL BUGGY. WORK OUT THE KINKS FIRST
+
 let memory = {
     current: ['0'],
     previous: '',
@@ -49,9 +51,7 @@ document.querySelectorAll('.number').forEach(item => {
             }
         } else {
             const num = event.target.id.charAt(event.target.id.length - 1);
-            console.log(memory.current);
             memory.current.join('') === "0" ? memory.current[0] = num : memory.current.push(num);
-            console.log(memory.current);
         };
         updateDisplay(memory.current.join(''));
         flags.input = true;
@@ -69,26 +69,54 @@ document.querySelectorAll('.operation').forEach(item => {
         } else {
             memory.operation = event.target.id;
         }; updateDisplay(memory.previous);
+        item.classList.add('selected');
     });
 });
 
 document.querySelectorAll('.control').forEach(item => {
     item.addEventListener('click', (event) => {
-        console.log(event.target.id);
         switch (event.target.id) {
-            case "clearEntry": memory.current = ['0']; break;
+            case "clearEntry": memory.current = ['0']; flags.input = false; break;
             case "clearAll": memory.wipe(); flags.reset(); break;
-            case "backspace": memory.current.pop(); break;
+            case "backspace":
+                if (memory.current.length > 2) {
+                    memory.current.pop(); 
+                    break;
+                } else if (memory.current.length = 2 && memory.current.includes('-')) {
+                    memory.current = ['-','0'];
+                } else {
+                    memory.current = ['0'];
+                    flags.input = false;
+                    break;
+                };
         }; 
         updateDisplay(memory.current.join(''));
     });
 });
 
 document.getElementById('equals').addEventListener('click', () => {
-    if (flags.input == true) {
-        memory.current = parseFloat(memory.current.join(''));
-        updateDisplay(memory.evaluate());
+    if (flags.input == true && memory.previous != '') {
+        if (memory.operation == 'divide' && memory.current.join('') == 0) {
+            updateDisplay("NICE TRY");
+        } else {
+            memory.current = parseFloat(memory.current.join(''));
+            updateDisplay(memory.evaluate());
+            memory.previous = memory.evaluate();
+        };
+        memory.current = ['0'];
         flags.evaluation = true;
         flags.input = false; // remove if buggy
     };
 });
+
+
+// FOR DEBUGGING
+// document.body.addEventListener('click', () => {
+//     if (typeof memory.current == "number") {
+//         document.getElementById('memcur').textContent = memory.current;
+//     } else {document.getElementById('memcur').textContent = memory.current.join('');}
+//     document.getElementById('memprev').textContent = memory.previous;
+//     document.getElementById('memop').textContent = memory.operation;
+//     document.getElementById('flaginp').textContent = flags.input;
+//     document.getElementById('flageval').textContent = flags.evaluation;
+// });
