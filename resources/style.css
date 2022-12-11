@@ -1,8 +1,13 @@
+@font-face {
+  font-family: bitmap;
+  src: url(superstar.ttf);
+}
 * {
   box-sizing: border-box;
 }
 
 body {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url(pattern.png) repeat;
   padding: 0;
   margin: 0;
   width: 100vw;
@@ -14,53 +19,56 @@ body {
 }
 
 main {
-  border: 1px solid red;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.4);
+  border: 5px solid white;
   width: 300px;
-  height: 450px;
+  height: 400px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 150px repeat(5, 1fr);
+  grid-template-rows: 100px repeat(5, 1fr);
   gap: 10px;
-  padding: 10px;
+  padding: 15px;
+  background-color: #333;
 }
 
 .screen {
-  border: 1px solid red;
   grid-column: 1/5;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: right;
+  align-items: flex-end;
+  background-color: rgb(79, 102, 79);
+  border-radius: 10px;
+  box-shadow: 6px 6px 6px -3px rgba(0, 0, 0, 0.25) inset, -4px -4px 8px -3px rgba(255, 255, 255, 0.15) inset;
+  background-image: linear-gradient(to top left, rgba(255, 255, 255, 0.05), transparent, rgba(0, 0, 0, 0.1));
+  padding: 10px;
 }
 .screen p {
   margin: 0;
   padding: 0;
-  font-size: 2em;
-  font-weight: bold;
+  font-family: bitmap;
+  font-size: 32px;
+  line-height: 20px;
 }
 
 button {
   border: none;
+  background: transparent;
+  box-shadow: 3px 3px 3px -1px rgba(0, 0, 0, 0.25), -2px -2px 4px -2px rgba(255, 255, 255, 0.15);
+  background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05), transparent, rgba(0, 0, 0, 0.1));
+  border-radius: 10px;
   color: white;
-  font-size: 1.5em;
+  font-size: 1.25em;
   font-weight: bold;
 }
-button:hover {
-  outline: 1px solid white;
-  outline-offset: -3px;
-}
-
-button.number {
-  background-color: blue;
-}
-
-button.operation {
-  background-color: green;
+button:active {
+  box-shadow: 3px 3px 3px -1px rgba(0, 0, 0, 0.25) inset, -2px -2px 4px -2px rgba(255, 255, 255, 0.15) inset;
+  background-image: linear-gradient(to top left, rgba(255, 255, 255, 0.05), transparent, rgba(0, 0, 0, 0.1));
 }
 
 button.control {
-  background-color: red;
+  background-color: crimson;
 }
 
-button#equals {
-  background-color: black;
+button.operation, button#equals {
+  background-color: #292929;
 }/*# sourceMappingURL=style.css.map */

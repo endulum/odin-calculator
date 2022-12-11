@@ -79,11 +79,12 @@ document.querySelectorAll('.control').forEach(item => {
             case "clearEntry": memory.current = ['0']; flags.input = false; break;
             case "clearAll": memory.wipe(); flags.reset(); break;
             case "backspace":
-                if (memory.current.length > 2) {
+                if (memory.current.length >= 2) {
                     memory.current.pop(); 
                     break;
                 } else if (memory.current.length = 2 && memory.current.includes('-')) {
                     memory.current = ['-','0'];
+                    break;
                 } else {
                     memory.current = ['0'];
                     flags.input = false;
